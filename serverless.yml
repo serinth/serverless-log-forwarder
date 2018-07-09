@@ -1,0 +1,40 @@
+service: log-forwarder
+
+custom:
+  # Our stage is based on what is passed in when running serverless
+  # commands. Or fallsback to what we have set in the provider section.
+  stage: ${opt:stage, self:provider.stage}
+  appName: log-forwarder
+
+provider:
+  name: aws
+  runtime: go1.x
+  stage: dev
+  region: ap-southeast-2
+  tags:
+    appName: ${self:custom.appName}
+    stage: ${self:custom.stage}
+    owner: tony.truong
+
+package:
+ exclude:
+   - ./**
+ include:
+   - ./bin/**
+
+functions:
+  forwarder:
+    handler: bin/forwarder
+    memorySize: 128
+
+resources:
+  Resources:
+    ForwarderLambdaPermission:
+      Type: "AWS::Lambda::Permission"
+      Properties:
+        Action: "lambda:InvokeFunction"
+        FunctionName:
+          Fn::GetAtt:
+            - ForwarderLambdaFunction
+            - Arn
+        Principal: logs.${self:provider.region}.amazonaws.com
