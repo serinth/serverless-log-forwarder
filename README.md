@@ -45,7 +45,7 @@ Example `~/.aws/config`:
 3. Run Serverless Deployment
 
 ```bash
-    serverless deploy -v --aws-profile MyProfile
+    serverless deploy -v --aws-profile TEMPSESSION
 ```
 # Integration into other Serverless Project
 
