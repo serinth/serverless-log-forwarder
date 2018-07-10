@@ -24,7 +24,7 @@ Once you have the output, put it in your credentials file and ensure the named p
 
 Example `~/.aws/credentials`:
 ```
-    [Default]
+    [default]
     aws_access_key_id = xxx
     aws_secret_access_key = xxx
     
@@ -42,10 +42,31 @@ Example `~/.aws/config`:
     mfa_serial = <ARN>
 ```
 
+Alternatively, you can use `pip install awsmfa` to handle the MFA for you.
+Then run `awsmfa -i <Profile name with long term access key and secret>`
+e.g:
+
+`~/.aws/credentials`
+```yaml
+  [LongTerm]
+  aws_access_key_id = xxx
+  aws_secret_access_key = xxx
+  aws_mfa_device = <ARN>
+```
+
+`~/.aws/config`
+```yaml
+  [profile LongTerm]
+  region = ap-southeast-2
+  output = json
+```
+
+This will update the `[default]` profile with the temporary credentials and then we can use `--aws-profile default` parameters below.
+
 3. Run Serverless Deployment
 
 ```bash
-    serverless deploy -v --aws-profile TEMPSESSION
+    serverless deploy -v --aws-profile <Profile>
 ```
 # Integration into other Serverless Project
 
@@ -67,5 +88,5 @@ custom:
 # Clean Up
 
 ```bash
-    serverless remove -v --aws-profile TEMPSESSION
+    serverless remove -v --aws-profile <Profile>
 ```
