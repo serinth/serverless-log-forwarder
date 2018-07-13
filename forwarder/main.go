@@ -7,6 +7,7 @@ import (
 	"github.com/aws/aws-lambda-go/lambda"
 )
 
+// TODO: Implement your specific integration here
 func Handler(request events.CloudwatchLogsEvent) error {
 	cloudwatchLogsData, err := request.AWSLogs.Parse()
 	if err != nil {
